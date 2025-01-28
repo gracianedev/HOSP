@@ -1,4 +1,3 @@
-
 package visao;
 
 import dao.ConvenioDAO;
@@ -196,13 +195,26 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                         "Selecione um produto");
             } // fecha else
 
-           // Criando objeto PacienteDAO para cadastrar o paciente no banco de dados
-            PacienteDAO pacDAO = new PacienteDAO();
-            pacDAO.cadastrarPaciente(pac);
+            //Verificando se todos os campos obrigatórios foram preenchidos
+            if (jtNome.getText().isBlank() || jtNome.getText().isEmpty()
+                    || jtCpf.getText().isBlank() || jtCpf.getText().isEmpty()
+                    || jtDataNasc.getText().isBlank() || jtDataNasc.getText().isEmpty()
+                    || jtEndereco.getText().isBlank() || jtEndereco.getText().isEmpty()
+                    || jtTelefone.getText().isBlank() || jtTelefone.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Verifique o preenchimento dos campos obrigatórios. Nome, CPF, Data de Nascimento, Endereço e Telefone devem ser preenchidos.");
+                return;
+            } else {
 
-            // Mensagem de sucesso
-            JOptionPane.showMessageDialog(this, "Paciente cadastrado com sucesso!");
+                // Se todos os campos obrigatórios estiverem preenchidos, segue para o cadastro do paciente
+                // Criando objeto PacienteDAO para cadastrar o paciente no banco de dados
+                PacienteDAO pacDAO = new PacienteDAO();
+                pacDAO.cadastrarPaciente(pac);
 
+                // Mensagem de sucesso
+                JOptionPane.showMessageDialog(this, "Paciente cadastrado com sucesso!");
+                limpar();
+            } // fecha else
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "ERRO! " + e.getMessage());
@@ -223,7 +235,6 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
 
     }// fecha método
 
-    
     // metodo para preencher o combo box com os produtos cadastrados no banco de dados
     private void preencherCombo() {
         try {
@@ -257,12 +268,12 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {
         limpar();
-        
+
     }
 
     private void jbCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {
         cadastrar();
-        limpar();
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
