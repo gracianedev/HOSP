@@ -215,6 +215,12 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
         jtNome.setText("");
         jtEndereco.setText("");
         jtCpf.setText("");
+        jtRG.setText("");
+        jtDataNasc.setText("");
+        jtTelefone.setText("");
+        jtEmail1.setText("");
+        jcConvenio.setSelectedIndex(0);
+
     }// fecha método
 
     
@@ -251,6 +257,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {
         limpar();
+        
     }
 
     private void jbCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {
