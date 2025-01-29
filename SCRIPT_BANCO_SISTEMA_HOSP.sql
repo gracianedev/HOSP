@@ -227,3 +227,10 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-03-08 19:43:02
+
+-- Ajustes de campos da tabela paciente
+ALTER TABLE paciente 
+MODIFY column NOME varchar(55),
+MODIFY column ENDERECO varchar(200),
+MODIFY column CPF varchar(14) UNIQUE,
+MODIFY column TELEFONE varchar(15);

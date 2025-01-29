@@ -172,7 +172,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
             pac.setEndereco(jtEndereco.getText());
             pac.setDataNascimento(sdf.parse(jtDataNasc.getText()));
             pac.setTelefone(jtTelefone.getText());
-            pac.setCpf(jtCpf.getText());
+            pac.setCpf(jtCpf.getText().replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4"));
             pac.setRg(jtRG.getText());
 
             // Verificando se um convênio foi selecionado no JComboBox
@@ -195,7 +195,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                         "Selecione um produto");
             } // fecha else
 
-            //Verificando se todos os campos obrigatórios foram preenchidos
+            //Verificando se todos os campos obrigatórios foram preenchidos e seguem as regras de negócio
             if (jtNome.getText().isBlank() || jtNome.getText().isEmpty()
                     || jtCpf.getText().isBlank() || jtCpf.getText().isEmpty()
                     || jtDataNasc.getText().isBlank() || jtDataNasc.getText().isEmpty()
@@ -203,9 +203,33 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                     || jtTelefone.getText().isBlank() || jtTelefone.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Verifique o preenchimento dos campos obrigatórios. Nome, CPF, Data de Nascimento, Endereço e Telefone devem ser preenchidos.");
                 return;
-            } else {
 
-                // Se todos os campos obrigatórios estiverem preenchidos, segue para o cadastro do paciente
+            } else if (jtNome.getText().length() > 200) {
+                JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 200 caracteres.");
+                return;
+            } else if (jtEndereco.getText().length() > 200) {
+                JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 200 caracteres.");
+                return;
+
+            } else if (!jtCpf.getText().matches("[0-9]{11}")) {
+                JOptionPane.showMessageDialog(null, "O campo CPF deve conter 11 dígitos.");
+                return;
+            } else if (jtTelefone.getText().length() > 15) {
+                JOptionPane.showMessageDialog(null, "Telefone deve conter no máximo 15 caracteres.");
+                return;
+
+            } else if (!jtTelefone.getText().matches("[(][0-9]{2}[)][0-9]{4}[-][0-9]{4}")) {
+                JOptionPane.showMessageDialog(null, "Telefone deve ser informado no formato (xx)xxxx-xxxx .");
+                return;
+
+            } else if (!jtEmail1.getText().isEmpty() && !jtEmail1.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                JOptionPane.showMessageDialog(null, "E-mail precisa ser no formato nome@dominio.com ");
+                return;
+                }
+                
+             else {
+
+                // Se todos os campos obrigatórios estiverem preenchidos, e nos formatos corretos, segue para o cadastro do paciente
                 // Criando objeto PacienteDAO para cadastrar o paciente no banco de dados
                 PacienteDAO pacDAO = new PacienteDAO();
                 pacDAO.cadastrarPaciente(pac);
@@ -214,7 +238,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Paciente cadastrado com sucesso!");
                 limpar();
             } // fecha else
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "ERRO! " + e.getMessage());
@@ -273,7 +297,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
 
     private void jbCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {
         cadastrar();
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
