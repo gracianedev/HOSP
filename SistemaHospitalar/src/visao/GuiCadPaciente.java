@@ -192,7 +192,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
 
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Selecione um produto");
+                        "Selecione um convênio.");
             } // fecha else
 
             //Verificando se todos os campos obrigatórios foram preenchidos e seguem as regras de negócio
