@@ -227,7 +227,7 @@ public class GuiJTableBuscaPaciente extends javax.swing.JInternalFrame {
                         String.valueOf(p.get(i).getIdPaciente()),
                         p.get(i).getNome(),
                         p.get(i).getCpf(),
-                         p.get(i).getTelefone(),});
+                        p.get(i).getTelefone(),});
 
                 }//fecha for
 
@@ -248,7 +248,10 @@ public class GuiJTableBuscaPaciente extends javax.swing.JInternalFrame {
 
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
+        jtFiltro.setText("");
         limparTabela();
+        preencherTabela();
+
     }//GEN-LAST:event_jbLimparActionPerformed
 
     private void jtFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtFiltroKeyReleased
