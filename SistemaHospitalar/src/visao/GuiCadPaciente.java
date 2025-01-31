@@ -204,8 +204,8 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Verifique o preenchimento dos campos obrigatórios. Nome, CPF, Data de Nascimento, Endereço e Telefone devem ser preenchidos.");
                 return;
 
-            } else if (jtNome.getText().length() > 200) {
-                JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 200 caracteres.");
+            } else if (jtNome.getText().length() > 55) {
+                JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 55 caracteres.");
                 return;
             } else if (jtEndereco.getText().length() > 200) {
                 JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 200 caracteres.");
@@ -218,8 +218,8 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Telefone deve conter no máximo 15 caracteres.");
                 return;
 
-            } else if (!jtTelefone.getText().matches("[(][0-9]{2}[)][0-9]{4}[-][0-9]{4}")) {
-                JOptionPane.showMessageDialog(null, "Telefone deve ser informado no formato (xx)xxxx-xxxx .");
+            } else if (!jtTelefone.getText().matches("\\([0-9]{2}\\) [0-9]{4}-[0-9]{4}")) {
+                JOptionPane.showMessageDialog(null, "Telefone deve ser informado no formato (xx) xxxx-xxxx .");
                 return;
 
             } else if (!jtEmail1.getText().isEmpty() && !jtEmail1.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
