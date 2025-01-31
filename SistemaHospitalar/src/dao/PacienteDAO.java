@@ -31,7 +31,7 @@ public class PacienteDAO {
     }
 
     // método cadastrarPaciente
-    public void cadastrarPaciente(Paciente pac) throws SQLException {
+    public boolean cadastrarPaciente(Paciente pac) throws SQLException {
 
         try {
 
@@ -39,7 +39,7 @@ public class PacienteDAO {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
             // String que receberá instrução SQL
-            String sql = "insert into PACIENTE(NOME, ENDERECO, DATA_NASC, TELEFONE, CPF, RG, ID_CONVENIO_FK) values(?,?,?,?,?,?,?)";
+            String sql = "insert into PACIENTE(NOME, ENDERECO, DATA_NASC, TELEFONE, CPF, RG, ID_CONVENIO_FK, EMAIL) values(?,?,?,?,?,?,?,?)";
 
             PreparedStatement pst = this.con.prepareStatement(sql);
 
@@ -51,9 +51,11 @@ public class PacienteDAO {
             pst.setString(5, pac.getCpf());
             pst.setString(6, pac.getRg());
             pst.setInt(7, pac.getIdConvenio());
+            pst.setString(8, pac.getEmail());
 
             // Executando o PreparedStatement
             pst.execute();
+            return true;
 
         } catch (SQLException se) {
             throw new SQLException("Erro ao inserir dados no Banco de Dados! " + se.getMessage());
@@ -107,6 +109,7 @@ public class PacienteDAO {
                 pac.setCpf(rs.getString("CPF"));
                 pac.setRg(rs.getString("RG"));
                 pac.setIdConvenio(rs.getInt("ID_CONVENIO_FK"));
+                pac.setEmail(rs.getString("EMAIL"));
 
 
                 /* Inserindo o objeto Paciente no ArrayList */

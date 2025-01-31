@@ -174,6 +174,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
             pac.setTelefone(jtTelefone.getText());
             pac.setCpf(jtCpf.getText().replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4"));
             pac.setRg(jtRG.getText());
+            pac.setEmail(jtEmail1.getText() );
 
             // Verificando se um convênio foi selecionado no JComboBox
             if (!(jcConvenio.getSelectedIndex() == 0)) {
