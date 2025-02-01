@@ -50,4 +50,56 @@ public class PacienteServicos {
         return pacDAO.buscarPaciente();
     }
 
+    public boolean validarPaciente(Paciente pac) {
+        if (pac.getNome().isBlank() || pac.getCpf().isBlank() || pac.getEndereco().isBlank()
+                || pac.getDataNascimento() == null || pac.getTelefone().isBlank()) {
+            return false;
+        }
+
+        if (pac.getNome().length() > 55 || pac.getEndereco().length() > 200) {
+            return false;
+        }
+
+        if (!pac.getCpf().replaceAll("[^0-9]", "").matches("[0-9]{11}")) {
+            return false;
+        }
+
+        if (pac.getTelefone().length() > 15 || !pac.getTelefone().matches("\\([0-9]{2}\\) [0-9]{4}-[0-9]{4}")) {
+            return false;
+        }
+
+        if (pac.getEmail() != null && !pac.getEmail().isEmpty()) {
+            if (!pac.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    public static String validarDados(String nome, String endereco, String cpf, String telefone, String email, String dataNasc) {
+        // Alertas para o usuário caso os campos não estejam preenchidos corretamente
+        if (nome.isBlank() || nome.isEmpty()
+                || cpf.isBlank() || cpf.isEmpty()
+                || dataNasc.isBlank() || dataNasc.isEmpty()
+                || endereco.isBlank() || endereco.isEmpty()
+                || telefone.isBlank() || telefone.isEmpty()) {
+            return "Verifique o preenchimento dos campos obrigatórios. Nome, CPF, Data de Nascimento, Endereço e Telefone devem ser preenchidos.";
+        } else if (nome.length() > 55) {
+            return "Nome deve conter no máximo 55 caracteres.";
+        } else if (endereco.length() > 200) {
+            return "Endereço deve conter no máximo 200 caracteres.";
+        } else if (!cpf.matches("[0-9]{11}")) {
+            return "O campo CPF deve conter 11 dígitos.";
+        } else if (telefone.length() > 15) {
+            return "Telefone deve conter 15 caracteres.";
+        } else if (!telefone.matches("\\([0-9]{2}\\) [0-9]{4}-[0-9]{4}")) {
+            return "Telefone deve ser informado no formato (xx) xxxx-xxxx.";
+        } else if (!email.isEmpty() && !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            return "E-mail precisa ser no formato nome@dominio.com.";
+        }
+        return "";
+    }
+
 }

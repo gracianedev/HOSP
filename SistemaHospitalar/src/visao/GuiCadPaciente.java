@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import modelo.Convenio;
 import modelo.Paciente;
 import servicos.ConvenioServicos;
+import servicos.PacienteServicos;
 import servicos.ServicosFactory;
 
 public class GuiCadPaciente extends javax.swing.JInternalFrame {
@@ -164,8 +165,16 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
         try {
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-            Paciente pac = new Paciente();
+            String erroPreenchimento = PacienteServicos.validarDados(jtNome.getText(), jtEndereco.getText(), jtCpf.getText(), jtTelefone.getText(), jtEmail1.getText(), jtDataNasc.getText());
+ 
+           // Se houver erro de preenchimento o erro é identificado e informado ao usuário 
+           if (!erroPreenchimento.isEmpty()) {
+                JOptionPane.showMessageDialog(null, erroPreenchimento);
+                return;}
+           
+           
+           
+           Paciente pac = new Paciente();
 
             // Atribuindo valores aos atributos do Paciente com base nos campos preenchidos pelo usuário na tela
             pac.setNome(jtNome.getText());
@@ -174,8 +183,10 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
             pac.setTelefone(jtTelefone.getText());
             pac.setCpf(jtCpf.getText().replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4"));
             pac.setRg(jtRG.getText());
-            pac.setEmail(jtEmail1.getText() );
+            pac.setEmail(jtEmail1.getText().isBlank() ? null : jtEmail1.getText());
 
+            
+            
             // Verificando se um convênio foi selecionado no JComboBox
             if (!(jcConvenio.getSelectedIndex() == 0)) {
 
@@ -196,40 +207,10 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                         "Selecione um convênio.");
             } // fecha else
 
-            //Verificando se todos os campos obrigatórios foram preenchidos e seguem as regras de negócio
-            if (jtNome.getText().isBlank() || jtNome.getText().isEmpty()
-                    || jtCpf.getText().isBlank() || jtCpf.getText().isEmpty()
-                    || jtDataNasc.getText().isBlank() || jtDataNasc.getText().isEmpty()
-                    || jtEndereco.getText().isBlank() || jtEndereco.getText().isEmpty()
-                    || jtTelefone.getText().isBlank() || jtTelefone.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Verifique o preenchimento dos campos obrigatórios. Nome, CPF, Data de Nascimento, Endereço e Telefone devem ser preenchidos.");
-                return;
-
-            } else if (jtNome.getText().length() > 55) {
-                JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 55 caracteres.");
-                return;
-            } else if (jtEndereco.getText().length() > 200) {
-                JOptionPane.showMessageDialog(null, "Nome deve conter no máximo 200 caracteres.");
-                return;
-
-            } else if (!jtCpf.getText().matches("[0-9]{11}")) {
-                JOptionPane.showMessageDialog(null, "O campo CPF deve conter 11 dígitos.");
-                return;
-            } else if (jtTelefone.getText().length() > 15) {
-                JOptionPane.showMessageDialog(null, "Telefone deve conter no máximo 15 caracteres.");
-                return;
-
-            } else if (!jtTelefone.getText().matches("\\([0-9]{2}\\) [0-9]{4}-[0-9]{4}")) {
-                JOptionPane.showMessageDialog(null, "Telefone deve ser informado no formato (xx) xxxx-xxxx .");
-                return;
-
-            } else if (!jtEmail1.getText().isEmpty() && !jtEmail1.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-                JOptionPane.showMessageDialog(null, "E-mail precisa ser no formato nome@dominio.com ");
-                return;
-                }
-                
-             else {
-
+            // validação dos campos
+            PacienteServicos pacienteServ = new PacienteServicos();           
+            
+            if (pacienteServ.validarPaciente(pac)) {
                 // Se todos os campos obrigatórios estiverem preenchidos, e nos formatos corretos, segue para o cadastro do paciente
                 // Criando objeto PacienteDAO para cadastrar o paciente no banco de dados
                 PacienteDAO pacDAO = new PacienteDAO();
@@ -238,9 +219,14 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
                 // Mensagem de sucesso
                 JOptionPane.showMessageDialog(this, "Paciente cadastrado com sucesso!");
                 limpar();
-            } // fecha else
+                         
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro na validação do paciente.");
+                return;
+            }
 
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this,
                     "ERRO! " + e.getMessage());
         } // fecha catch
@@ -289,7 +275,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this,
                     "Erro! " + e.getMessage());
         } // fecha catch
-    }// fecha classe
+    }
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {
         limpar();
